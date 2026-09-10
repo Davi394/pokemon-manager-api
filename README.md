@@ -156,6 +156,8 @@ http://localhost:3333/api/docs
 | `npm run build` | Gera o Swagger e compila o projeto TypeScript |
 | `npm run lint` | Analisa o código utilizando ESLint e Prettier |
 | `npm run swagger` | Gera o arquivo da especificação Swagger/OpenAPI |
+| `npm run format` | Executa o Prettier para padronizar a formatação dos arquivos TypeScript |
+| `npm run lint:fix` | Executa o ESLint aplicando correções automáticas quando possível |
 
 ---
 
