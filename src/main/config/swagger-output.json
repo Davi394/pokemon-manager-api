@@ -1,0 +1,321 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "PokéManager API",
+    "description": "API para gerenciamento de Pokémons desenvolvida na disciplina Tópicos Especiais em Engenharia de Software (UFF)"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3333/api/v1/pokemons"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Pokemons",
+      "description": "Endpoints de gerenciamento de Pokémons"
+    }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "tags": [
+          "Pokemons"
+        ],
+        "summary": "Lista Pokémons do catálogo local",
+        "description": "Endpoint para listar todos os Pokémons cadastrados em memória, com suporte opcional ao filtro por tipo.",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "example": "Psychic",
+            "description": "Tipo do Pokémon usado como filtro opcional.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de Pokémons retornada com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Pokemon"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Pokemons"
+        ],
+        "summary": "Cadastra um Pokémon no catálogo local",
+        "description": "Endpoint para cadastrar manualmente uma espécie de Pokémon no catálogo em memória.",
+        "responses": {
+          "201": {
+            "description": "Pokémon criado com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Pokémon criado com sucesso!"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Pokemon"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePokemonDto"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{id}": {
+      "get": {
+        "tags": [
+          "Pokemons"
+        ],
+        "summary": "Busca um Pokémon pelo ID",
+        "description": "Endpoint para buscar uma espécie de Pokémon do catálogo local a partir do ID informado na URL.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "150",
+            "description": "ID do Pokémon."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pokémon encontrado com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Pokemon"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Pokémon não encontrado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Pokemons"
+        ],
+        "summary": "Atualiza um Pokémon pelo ID",
+        "description": "Endpoint para atualizar completamente os dados de um Pokémon existente no catálogo local.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "150",
+            "description": "ID do Pokémon."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pokémon atualizado com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Pokémon atualizado com sucesso!"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Pokemon"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Pokémon não encontrado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePokemonDto"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Pokemons"
+        ],
+        "summary": "Remove um Pokémon pelo ID",
+        "description": "Endpoint para remover uma espécie de Pokémon do catálogo local em memória.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "150",
+            "description": "ID do Pokémon."
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Pokémon removido com sucesso."
+          },
+          "404": {
+            "description": "Pokémon não encontrado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Pokemon": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "25"
+          },
+          "name": {
+            "type": "string",
+            "example": "Pikachu"
+          },
+          "type": {
+            "type": "string",
+            "example": "Electric"
+          },
+          "hp": {
+            "type": "number",
+            "example": 35
+          },
+          "attack": {
+            "type": "number",
+            "example": 55
+          },
+          "defense": {
+            "type": "number",
+            "example": 40
+          }
+        }
+      },
+      "CreatePokemonDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "25"
+          },
+          "name": {
+            "type": "string",
+            "example": "Pikachu"
+          },
+          "type": {
+            "type": "string",
+            "example": "Electric"
+          },
+          "hp": {
+            "type": "number",
+            "example": 35
+          },
+          "attack": {
+            "type": "number",
+            "example": 55
+          },
+          "defense": {
+            "type": "number",
+            "example": 40
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "type",
+          "hp",
+          "attack",
+          "defense"
+        ]
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Pokémon não encontrado no catálogo."
+          }
+        }
+      }
+    }
+  }
+}
