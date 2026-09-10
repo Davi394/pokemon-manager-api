@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import { CreatePokemonUseCase } from '@application/useCases/createPokemon';
 import { ListPokemonsUseCase } from '@application/useCases/listPokemons';
 import { GetPokemonByIdUseCase } from '@application/useCases/getPokemonById';
-import { ResourceNotFoundError } from '@domain/errors/resource-not-found.error';
 import { UpdatePokemonUseCase } from '@application/useCases/updatePokemon';
 import { DeletePokemonUseCase } from '@application/useCases/deletePokemon';
 
@@ -60,80 +59,50 @@ export class PokemonController {
   async getById(req: Request, res: Response): Promise<Response> {
     const id = req.params.id as string;
 
-    try {
-      const pokemon = await this.getPokemonByIdUseCase.execute(id);
+    const pokemon = await this.getPokemonByIdUseCase.execute(id);
 
-      return res.status(200).json({
-        data: {
-          id: pokemon.id,
-          name: pokemon.name,
-          type: pokemon.type,
-          hp: pokemon.hp,
-          attack: pokemon.attack,
-          defense: pokemon.defense,
-        },
-      });
-    } catch (error) {
-      if (error instanceof ResourceNotFoundError) {
-        return res.status(404).json({
-          message: error.message,
-        });
-      }
-
-      throw error;
-    }
+    return res.status(200).json({
+      data: {
+        id: pokemon.id,
+        name: pokemon.name,
+        type: pokemon.type,
+        hp: pokemon.hp,
+        attack: pokemon.attack,
+        defense: pokemon.defense,
+      },
+    });
   }
 
   async update(req: Request, res: Response): Promise<Response> {
     const id = req.params.id as string;
     const { name, type, hp, attack, defense } = req.body;
 
-    try {
-      const pokemon = await this.updatePokemonUseCase.execute(id, {
-        name,
-        type,
-        hp,
-        attack,
-        defense,
-      });
+    const pokemon = await this.updatePokemonUseCase.execute(id, {
+      name,
+      type,
+      hp,
+      attack,
+      defense,
+    });
 
-      return res.status(200).json({
-        message: 'PokÃ©mon atualizado com sucesso!',
-        data: {
-          id: pokemon.id,
-          name: pokemon.name,
-          type: pokemon.type,
-          hp: pokemon.hp,
-          attack: pokemon.attack,
-          defense: pokemon.defense,
-        },
-      });
-    } catch (error) {
-      if (error instanceof ResourceNotFoundError) {
-        return res.status(404).json({
-          message: error.message,
-        });
-      }
-
-      throw error;
-    }
+    return res.status(200).json({
+      message: 'Pokémon atualizado com sucesso!',
+      data: {
+        id: pokemon.id,
+        name: pokemon.name,
+        type: pokemon.type,
+        hp: pokemon.hp,
+        attack: pokemon.attack,
+        defense: pokemon.defense,
+      },
+    });
   }
 
   async delete(req: Request, res: Response): Promise<Response> {
     const id = req.params.id as string;
 
-    try {
-      await this.deletePokemonUseCase.execute(id);
+    await this.deletePokemonUseCase.execute(id);
 
-      return res.status(204).send();
-    } catch (error) {
-      if (error instanceof ResourceNotFoundError) {
-        return res.status(404).json({
-          message: error.message,
-        });
-      }
-
-      throw error;
-    }
+    return res.status(204).send();
   }
 }

@@ -1,5 +1,5 @@
 import { Pokemon } from '@domain/entities/pokemon';
-import { ResourceNotFoundError } from '@domain/errors/resource-not-found.error';
+import { AppError } from '@domain/errors/app.error';
 import { IPokemonRepository } from '@domain/repositories/pokemon.repository';
 
 interface UpdatePokemonDTO {
@@ -17,7 +17,7 @@ export class UpdatePokemonUseCase {
     const pokemonExists = await this.pokemonRepository.findById(id);
 
     if (!pokemonExists) {
-      throw new ResourceNotFoundError('Pokémon não encontrado no catálogo.');
+      throw new AppError('Pokémon não encontrado no catálogo.', 404);
     }
 
     const pokemon = new Pokemon({

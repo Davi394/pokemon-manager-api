@@ -1,5 +1,5 @@
 import { Pokemon } from '@domain/entities/pokemon';
-import { ResourceNotFoundError } from '@domain/errors/resource-not-found.error';
+import { AppError } from '@domain/errors/app.error';
 import { IPokemonRepository } from '@domain/repositories/pokemon.repository';
 
 export class GetPokemonByIdUseCase {
@@ -9,7 +9,7 @@ export class GetPokemonByIdUseCase {
     const pokemon = await this.pokemonRepository.findById(id);
 
     if (!pokemon) {
-      throw new ResourceNotFoundError('Pokémon não encontrado no catálogo.');
+      throw new AppError('Pokémon não encontrado no catálogo.', 404);
     }
 
     return pokemon;

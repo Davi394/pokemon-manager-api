@@ -1,5 +1,6 @@
 import { Pokemon } from '@domain/entities/pokemon';
 import { IPokemonRepository } from '@domain/repositories/pokemon.repository';
+import { AppError } from '@domain/errors/app.error';
 
 interface CreatePokemonDTO {
   id: string;
@@ -17,7 +18,7 @@ export class CreatePokemonUseCase {
     const pokemonAlreadyExists = await this.pokemonRepository.findById(data.id);
 
     if (pokemonAlreadyExists) {
-      throw new Error('Pokémon com este ID já está cadastrado.');
+      throw new AppError('Pokémon com este ID já está cadastrado.', 400);
     }
 
     const pokemon = new Pokemon(data);
