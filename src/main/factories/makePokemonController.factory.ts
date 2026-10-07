@@ -3,11 +3,11 @@ import { DeletePokemonUseCase } from '@application/useCases/deletePokemon';
 import { GetPokemonByIdUseCase } from '@application/useCases/getPokemonById';
 import { ListPokemonsUseCase } from '@application/useCases/listPokemons';
 import { UpdatePokemonUseCase } from '@application/useCases/updatePokemon';
-import { InMemoryPokemonRepository } from '@infrastructure/database/in-memory/inMemoryPokemon.repository';
+import { PrismaPokemonRepository } from '@infrastructure/database/prisma/prismaPokemon.repository';
 import { PokemonController } from '@infrastructure/http/controllers/pokemon.controller';
 
 // Repositório compartilhado (Singleton em memória durante o runtime)
-const pokemonRepository = new InMemoryPokemonRepository();
+const pokemonRepository = new PrismaPokemonRepository();
 
 export function makePokemonController(): PokemonController {
   const listPokemonsUseCase = new ListPokemonsUseCase(pokemonRepository);
