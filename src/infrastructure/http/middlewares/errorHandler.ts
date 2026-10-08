@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { Prisma } from '@prisma/client';
+import { ZodError } from 'zod';
 import { AppError } from '@domain/errors/app.error';
 import { PrismaErrorMapper } from '@infrastructure/database/prisma/prismaError.mapper';
 
@@ -22,6 +23,21 @@ export function errorHandler(
     }
 
     return res.status(error.statusCode).json(responsePayload);
+  }
+
+  // Erros de validação do Zod que escaparem do validateRequest
+  if (error instanceof ZodError) {
+    const issueDetails = error.issues.map((issue) => ({
+      field: issue.path.join('.'),
+      message: issue.message,
+    }));
+
+    return res.status(400).json({
+      status: 'error',
+      statusCode: 400,
+      message: 'Dados de entrada inválidos',
+      details: issueDetails,
+    });
   }
 
   // 2. Erros conhecidos do banco de dados (Prisma), traduzidos pelo mapper

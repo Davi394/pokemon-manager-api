@@ -27,7 +27,7 @@ export class PokemonController {
     });
 
     return res.status(201).json({
-      message: 'PokÃ©mon criado com sucesso!',
+      message: 'Pokémon criado com sucesso!',
       data: {
         id: pokemon.id,
         name: pokemon.name,
