@@ -12,10 +12,10 @@ app.use(express.json());
 // 1. Documentação Swagger
 setupSwagger(app);
 
-// 2. Rotas dos módulos
-app.use('/api/v1/pokemons', pokemonRoutes);
-app.use('/api/v1/pokedex', pokedexRoutes);
-app.use('/api/v1/trainers', trainerRoutes);
+// 2. Rotas dos módulos (cada arquivo declara o caminho do seu recurso)
+app.use('/api/v1', pokemonRoutes);
+app.use('/api/v1', pokedexRoutes);
+app.use('/api/v1', trainerRoutes);
 
 // 3. Middleware Global de Erros (OBRIGATORIAMENTE NO FINAL)
 app.use(errorHandler);

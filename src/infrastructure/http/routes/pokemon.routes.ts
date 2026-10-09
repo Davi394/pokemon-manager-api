@@ -12,7 +12,7 @@ const pokemonRoutes = Router();
 const pokemonController = makePokemonController();
 
 pokemonRoutes.get(
-  '/',
+  '/pokemons',
   validateRequest({ query: listPokemonsQuerySchema }),
   (req, res) => {
     /*
@@ -48,7 +48,7 @@ pokemonRoutes.get(
 );
 
 pokemonRoutes.post(
-  '/',
+  '/pokemons',
   validateRequest({ body: createPokemonBodySchema }),
   (req, res) => {
     /*
@@ -86,7 +86,7 @@ pokemonRoutes.post(
 );
 
 pokemonRoutes.get(
-  '/:id',
+  '/pokemons/:id',
   validateRequest({ params: pokemonIdParamsSchema }),
   (req, res) => {
     /*
@@ -127,7 +127,7 @@ pokemonRoutes.get(
 );
 
 pokemonRoutes.put(
-  '/:id',
+  '/pokemons/:id',
   validateRequest({
     params: pokemonIdParamsSchema,
     body: updatePokemonBodySchema,
@@ -183,7 +183,7 @@ pokemonRoutes.put(
 );
 
 pokemonRoutes.delete(
-  '/:id',
+  '/pokemons/:id',
   validateRequest({ params: pokemonIdParamsSchema }),
   (req, res) => {
     /*

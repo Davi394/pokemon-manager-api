@@ -7,7 +7,7 @@ const trainerRoutes = Router();
 const trainerController = makeTrainerController();
 
 trainerRoutes.post(
-  '/',
+  '/trainers',
   validateRequest({ body: createTrainerBodySchema }),
   (req, res) => {
     /*

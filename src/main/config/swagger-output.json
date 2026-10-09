@@ -1,23 +1,31 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "version": "1.0.0",
+    "version": "2.0.0",
     "title": "PokéManager API",
     "description": "API para gerenciamento de Pokémons desenvolvida na disciplina Tópicos Especiais em Engenharia de Software (UFF)"
   },
   "servers": [
     {
-      "url": "http://localhost:3333/api/v1/pokemons"
+      "url": "http://localhost:3333/api/v1"
     }
   ],
   "tags": [
     {
       "name": "Pokemons",
-      "description": "Endpoints de gerenciamento de Pokémons"
+      "description": "Catálogo local de Pokémons"
+    },
+    {
+      "name": "Pokedex",
+      "description": "Consulta à PokéAPI oficial"
+    },
+    {
+      "name": "Trainers",
+      "description": "Treinadores, capturas e times"
     }
   ],
   "paths": {
-    "/": {
+    "/pokemons": {
       "get": {
         "tags": [
           "Pokemons"
@@ -96,7 +104,7 @@
         }
       }
     },
-    "/{id}": {
+    "/pokemons/{id}": {
       "get": {
         "tags": [
           "Pokemons"
@@ -237,6 +245,90 @@
           }
         }
       }
+    },
+    "/pokedex/search": {
+      "get": {
+        "tags": [
+          "Pokedex"
+        ],
+        "summary": "Busca um Pokémon na PokéAPI oficial",
+        "description": "Consulta a PokéAPI pelo nome e retorna os dados formatados (tipos, imagem e atributos base).",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "example": "pikachu",
+            "description": "Nome do Pokémon (maiúsculas são aceitas).",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pokémon encontrado na PokéAPI."
+          },
+          "400": {
+            "description": "Parâmetro name ausente ou inválido."
+          },
+          "404": {
+            "description": "Pokémon não encontrado na PokéAPI."
+          },
+          "502": {
+            "description": "PokéAPI indisponível ou fora do tempo limite."
+          }
+        }
+      }
+    },
+    "/trainers": {
+      "post": {
+        "tags": [
+          "Trainers"
+        ],
+        "summary": "Cadastra um novo treinador",
+        "description": "",
+        "responses": {
+          "201": {
+            "description": "Treinador cadastrado com sucesso."
+          },
+          "400": {
+            "description": "Dados de entrada inválidos."
+          },
+          "409": {
+            "description": "E-mail já cadastrado."
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "email",
+                  "city"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Ash Ketchum"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "ash@pallet.com"
+                  },
+                  "city": {
+                    "type": "string",
+                    "example": "Pallet"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -310,6 +402,14 @@
       "ErrorResponse": {
         "type": "object",
         "properties": {
+          "status": {
+            "type": "string",
+            "example": "error"
+          },
+          "statusCode": {
+            "type": "number",
+            "example": 404
+          },
           "message": {
             "type": "string",
             "example": "Pokémon não encontrado no catálogo."

@@ -7,7 +7,7 @@ const pokedexRoutes = Router();
 const pokedexController = makePokedexController();
 
 pokedexRoutes.get(
-  '/search',
+  '/pokedex/search',
   validateRequest({ query: searchPokedexQuerySchema }),
   (req, res) => {
     /*
