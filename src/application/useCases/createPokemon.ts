@@ -1,6 +1,6 @@
 import { Pokemon } from '@domain/entities/pokemon';
 import { IPokemonRepository } from '@domain/repositories/pokemon.repository';
-import { AppError } from '@domain/errors/app.error';
+import { ConflictError } from '@domain/errors/conflict.error';
 
 interface CreatePokemonDTO {
   id: string;
@@ -18,7 +18,7 @@ export class CreatePokemonUseCase {
     const pokemonAlreadyExists = await this.pokemonRepository.findById(data.id);
 
     if (pokemonAlreadyExists) {
-      throw new AppError('Pokémon com este ID já está cadastrado.', 400);
+      throw new ConflictError('Pokémon com este ID já está cadastrado.');
     }
 
     const pokemon = new Pokemon(data);

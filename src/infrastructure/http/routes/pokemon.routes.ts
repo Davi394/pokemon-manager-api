@@ -1,11 +1,21 @@
 import { Router } from 'express';
 import { makePokemonController } from '@main/factories/makePokemonController.factory';
+import { validateRequest } from '@infrastructure/http/middlewares/validateRequest';
+import {
+  createPokemonBodySchema,
+  listPokemonsQuerySchema,
+  pokemonIdParamsSchema,
+  updatePokemonBodySchema,
+} from '@infrastructure/http/schemas/pokemon.schema';
 
 const pokemonRoutes = Router();
 const pokemonController = makePokemonController();
 
-pokemonRoutes.get('/', (req, res) => {
-  /*
+pokemonRoutes.get(
+  '/pokemons',
+  validateRequest({ query: listPokemonsQuerySchema }),
+  (req, res) => {
+    /*
     #swagger.tags = ['Pokemons']
     #swagger.summary = 'Lista Pokémons do catálogo local'
     #swagger.description = 'Endpoint para listar todos os Pokémons cadastrados em memória, com suporte opcional ao filtro por tipo.'
@@ -33,11 +43,15 @@ pokemonRoutes.get('/', (req, res) => {
       }
     }
   */
-  return pokemonController.list(req, res);
-});
+    return pokemonController.list(req, res);
+  },
+);
 
-pokemonRoutes.post('/', (req, res) => {
-  /*
+pokemonRoutes.post(
+  '/pokemons',
+  validateRequest({ body: createPokemonBodySchema }),
+  (req, res) => {
+    /*
     #swagger.tags = ['Pokemons']
     #swagger.summary = 'Cadastra um Pokémon no catálogo local'
     #swagger.description = 'Endpoint para cadastrar manualmente uma espécie de Pokémon no catálogo em memória.'
@@ -67,11 +81,15 @@ pokemonRoutes.post('/', (req, res) => {
       }
     }
   */
-  return pokemonController.create(req, res);
-});
+    return pokemonController.create(req, res);
+  },
+);
 
-pokemonRoutes.get('/:id', (req, res) => {
-  /*
+pokemonRoutes.get(
+  '/pokemons/:id',
+  validateRequest({ params: pokemonIdParamsSchema }),
+  (req, res) => {
+    /*
     #swagger.tags = ['Pokemons']
     #swagger.summary = 'Busca um Pokémon pelo ID'
     #swagger.description = 'Endpoint para buscar uma espécie de Pokémon do catálogo local a partir do ID informado na URL.'
@@ -104,11 +122,18 @@ pokemonRoutes.get('/:id', (req, res) => {
       }
     }
   */
-  return pokemonController.getById(req, res);
-});
+    return pokemonController.getById(req, res);
+  },
+);
 
-pokemonRoutes.put('/:id', (req, res) => {
-  /*
+pokemonRoutes.put(
+  '/pokemons/:id',
+  validateRequest({
+    params: pokemonIdParamsSchema,
+    body: updatePokemonBodySchema,
+  }),
+  (req, res) => {
+    /*
     #swagger.tags = ['Pokemons']
     #swagger.summary = 'Atualiza um Pokémon pelo ID'
     #swagger.description = 'Endpoint para atualizar completamente os dados de um Pokémon existente no catálogo local.'
@@ -153,11 +178,15 @@ pokemonRoutes.put('/:id', (req, res) => {
       }
     }
   */
-  return pokemonController.update(req, res);
-});
+    return pokemonController.update(req, res);
+  },
+);
 
-pokemonRoutes.delete('/:id', (req, res) => {
-  /*
+pokemonRoutes.delete(
+  '/pokemons/:id',
+  validateRequest({ params: pokemonIdParamsSchema }),
+  (req, res) => {
+    /*
     #swagger.tags = ['Pokemons']
     #swagger.summary = 'Remove um Pokémon pelo ID'
     #swagger.description = 'Endpoint para remover uma espécie de Pokémon do catálogo local em memória.'
@@ -180,7 +209,8 @@ pokemonRoutes.delete('/:id', (req, res) => {
       }
     }
   */
-  return pokemonController.delete(req, res);
-});
+    return pokemonController.delete(req, res);
+  },
+);
 
 export { pokemonRoutes };

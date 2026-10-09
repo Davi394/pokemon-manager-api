@@ -1,26 +1,64 @@
 import { Request, Response, NextFunction } from 'express';
+import { Prisma } from '@prisma/client';
+import { ZodError } from 'zod';
 import { AppError } from '@domain/errors/app.error';
+import { PrismaErrorMapper } from '@infrastructure/database/prisma/prismaError.mapper';
 
 export function errorHandler(
   error: Error,
-  req: Request,
+  _req: Request,
   res: Response,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  next: NextFunction,
+  _next: NextFunction,
 ) {
-  // 1. Tratamento de erros conhecidos da aplicação (AppError)
+  // 1. Erros conhecidos da aplicação (AppError e filhas: ConflictError, etc.)
   if (error instanceof AppError) {
-    return res.status(error.statusCode).json({
+    const responsePayload: Record<string, unknown> = {
       status: 'error',
       statusCode: error.statusCode,
       message: error.message,
+    };
+
+    if (error.details !== undefined && error.details !== null) {
+      responsePayload.details = error.details;
+    }
+
+    return res.status(error.statusCode).json(responsePayload);
+  }
+
+  // Erros de validação do Zod que escaparem do validateRequest
+  if (error instanceof ZodError) {
+    const issueDetails = error.issues.map((issue) => ({
+      field: issue.path.join('.'),
+      message: issue.message,
+    }));
+
+    return res.status(400).json({
+      status: 'error',
+      statusCode: 400,
+      message: 'Dados de entrada inválidos',
+      details: issueDetails,
     });
   }
 
-  // 2. Log interno para erros não mapeados (Crashes/Bugs de runtime)
+  // 2. Erros conhecidos do banco de dados (Prisma), traduzidos pelo mapper
+  if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    const appError = PrismaErrorMapper.toAppError(error);
+
+    if (appError.statusCode === 500) {
+      console.error('💥 [Prisma Error]:', error);
+    }
+
+    return res.status(appError.statusCode).json({
+      status: 'error',
+      statusCode: appError.statusCode,
+      message: appError.message,
+    });
+  }
+
+  // 3. Log interno para erros não mapeados (bugs de runtime)
   console.error('💥 [Uncaught Exception]:', error);
 
-  // 3. Resposta genérica para o cliente em caso de erro 500
+  // 4. Resposta genérica para o cliente (sem expor detalhes internos)
   return res.status(500).json({
     status: 'error',
     statusCode: 500,
