@@ -18,3 +18,13 @@ model Pokemon {
 
   @@map("pokemons")
 }
+
+model Trainer {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  city      String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("trainers")
+}
