@@ -19,7 +19,9 @@
   "paths": {
     "/": {
       "get": {
-        "tags": ["Pokemons"],
+        "tags": [
+          "Pokemons"
+        ],
         "summary": "Lista Pokémons do catálogo local",
         "description": "Endpoint para listar todos os Pokémons cadastrados em memória, com suporte opcional ao filtro por tipo.",
         "parameters": [
@@ -56,7 +58,9 @@
         }
       },
       "post": {
-        "tags": ["Pokemons"],
+        "tags": [
+          "Pokemons"
+        ],
         "summary": "Cadastra um Pokémon no catálogo local",
         "description": "Endpoint para cadastrar manualmente uma espécie de Pokémon no catálogo em memória.",
         "responses": {
@@ -94,7 +98,9 @@
     },
     "/{id}": {
       "get": {
-        "tags": ["Pokemons"],
+        "tags": [
+          "Pokemons"
+        ],
         "summary": "Busca um Pokémon pelo ID",
         "description": "Endpoint para buscar uma espécie de Pokémon do catálogo local a partir do ID informado na URL.",
         "parameters": [
@@ -138,7 +144,9 @@
         }
       },
       "put": {
-        "tags": ["Pokemons"],
+        "tags": [
+          "Pokemons"
+        ],
         "summary": "Atualiza um Pokémon pelo ID",
         "description": "Endpoint para atualizar completamente os dados de um Pokémon existente no catálogo local.",
         "parameters": [
@@ -196,7 +204,9 @@
         }
       },
       "delete": {
-        "tags": ["Pokemons"],
+        "tags": [
+          "Pokemons"
+        ],
         "summary": "Remove um Pokémon pelo ID",
         "description": "Endpoint para remover uma espécie de Pokémon do catálogo local em memória.",
         "parameters": [
@@ -288,7 +298,14 @@
             "example": 40
           }
         },
-        "required": ["id", "name", "type", "hp", "attack", "defense"]
+        "required": [
+          "id",
+          "name",
+          "type",
+          "hp",
+          "attack",
+          "defense"
+        ]
       },
       "ErrorResponse": {
         "type": "object",
