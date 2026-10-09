@@ -82,4 +82,25 @@ trainerRoutes.post(
   },
 );
 
+trainerRoutes.get(
+  '/trainers/:trainerId/team',
+  validateRequest({ params: trainerIdParamsSchema }),
+  (req, res) => {
+    /*
+      #swagger.tags = ['Trainers']
+      #swagger.summary = 'Lista o time atual do treinador'
+      #swagger.parameters['trainerId'] = {
+        in: 'path',
+        required: true,
+        type: 'string',
+        description: 'ID (UUID) do treinador.'
+      }
+      #swagger.responses[200] = { description: 'Time do treinador (até 6 Pokémons).' }
+      #swagger.responses[400] = { description: 'ID do treinador inválido.' }
+      #swagger.responses[404] = { description: 'Treinador não encontrado.' }
+    */
+    return trainerController.team(req, res);
+  },
+);
+
 export { trainerRoutes };

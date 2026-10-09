@@ -385,6 +385,37 @@
           }
         }
       }
+    },
+    "/trainers/{trainerId}/team": {
+      "get": {
+        "tags": [
+          "Trainers"
+        ],
+        "summary": "Lista o time atual do treinador",
+        "description": "",
+        "parameters": [
+          {
+            "name": "trainerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID (UUID) do treinador."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Time do treinador (até 6 Pokémons)."
+          },
+          "400": {
+            "description": "ID do treinador inválido."
+          },
+          "404": {
+            "description": "Treinador não encontrado."
+          }
+        }
+      }
     }
   },
   "components": {
