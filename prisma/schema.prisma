@@ -25,6 +25,28 @@ model Trainer {
   email     String   @unique
   city      String
   createdAt DateTime @default(now()) @map("created_at")
+  captures  Capture[]
 
   @@map("trainers")
+}
+
+model Capture {
+  id             String   @id @default(uuid())
+  trainerId      String   @map("trainer_id")
+  pokedexId      Int      @map("pokedex_id")
+  name           String
+  types          String[]
+  sprite         String?
+  hp             Int
+  attack         Int
+  defense        Int
+  specialAttack  Int      @map("special_attack")
+  specialDefense Int      @map("special_defense")
+  speed          Int
+  capturedAt     DateTime @default(now()) @map("captured_at")
+
+  trainer Trainer @relation(fields: [trainerId], references: [id])
+
+  @@index([trainerId])
+  @@map("captures")
 }
