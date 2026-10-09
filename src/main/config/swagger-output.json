@@ -27,7 +27,9 @@
   "paths": {
     "/pokemons": {
       "get": {
-        "tags": ["Pokemons"],
+        "tags": [
+          "Pokemons"
+        ],
         "summary": "Lista Pokémons do catálogo local",
         "description": "Endpoint para listar todos os Pokémons cadastrados em memória, com suporte opcional ao filtro por tipo.",
         "parameters": [
@@ -64,7 +66,9 @@
         }
       },
       "post": {
-        "tags": ["Pokemons"],
+        "tags": [
+          "Pokemons"
+        ],
         "summary": "Cadastra um Pokémon no catálogo local",
         "description": "Endpoint para cadastrar manualmente uma espécie de Pokémon no catálogo em memória.",
         "responses": {
@@ -102,7 +106,9 @@
     },
     "/pokemons/{id}": {
       "get": {
-        "tags": ["Pokemons"],
+        "tags": [
+          "Pokemons"
+        ],
         "summary": "Busca um Pokémon pelo ID",
         "description": "Endpoint para buscar uma espécie de Pokémon do catálogo local a partir do ID informado na URL.",
         "parameters": [
@@ -146,7 +152,9 @@
         }
       },
       "put": {
-        "tags": ["Pokemons"],
+        "tags": [
+          "Pokemons"
+        ],
         "summary": "Atualiza um Pokémon pelo ID",
         "description": "Endpoint para atualizar completamente os dados de um Pokémon existente no catálogo local.",
         "parameters": [
@@ -204,7 +212,9 @@
         }
       },
       "delete": {
-        "tags": ["Pokemons"],
+        "tags": [
+          "Pokemons"
+        ],
         "summary": "Remove um Pokémon pelo ID",
         "description": "Endpoint para remover uma espécie de Pokémon do catálogo local em memória.",
         "parameters": [
@@ -238,7 +248,9 @@
     },
     "/pokedex/search": {
       "get": {
-        "tags": ["Pokedex"],
+        "tags": [
+          "Pokedex"
+        ],
         "summary": "Busca um Pokémon na PokéAPI oficial",
         "description": "Consulta a PokéAPI pelo nome e retorna os dados formatados (tipos, imagem e atributos base).",
         "parameters": [
@@ -271,7 +283,9 @@
     },
     "/trainers": {
       "post": {
-        "tags": ["Trainers"],
+        "tags": [
+          "Trainers"
+        ],
         "summary": "Cadastra um novo treinador",
         "description": "",
         "responses": {
@@ -291,7 +305,11 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["name", "email", "city"],
+                "required": [
+                  "name",
+                  "email",
+                  "city"
+                ],
                 "properties": {
                   "name": {
                     "type": "string",
@@ -304,6 +322,62 @@
                   "city": {
                     "type": "string",
                     "example": "Pallet"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/trainers/{trainerId}/captures": {
+      "post": {
+        "tags": [
+          "Trainers"
+        ],
+        "summary": "Captura um Pokémon para o time do treinador",
+        "description": "Busca o Pokémon na PokéAPI (imagem, atributos base e tipos) e salva a captura. Limite: 6 Pokémons no time ativo.",
+        "parameters": [
+          {
+            "name": "trainerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID (UUID) do treinador."
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Pokémon capturado com sucesso."
+          },
+          "400": {
+            "description": "Dados de entrada inválidos."
+          },
+          "404": {
+            "description": "Treinador ou Pokémon não encontrado."
+          },
+          "409": {
+            "description": "Time já possui 6 Pokémons."
+          },
+          "502": {
+            "description": "PokéAPI indisponível."
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "pokemonName"
+                ],
+                "properties": {
+                  "pokemonName": {
+                    "type": "string",
+                    "example": "pikachu"
                   }
                 }
               }
@@ -372,7 +446,14 @@
             "example": 40
           }
         },
-        "required": ["id", "name", "type", "hp", "attack", "defense"]
+        "required": [
+          "id",
+          "name",
+          "type",
+          "hp",
+          "attack",
+          "defense"
+        ]
       },
       "ErrorResponse": {
         "type": "object",
